@@ -1,6 +1,5 @@
 import { Axios } from "axios";
-import { TMoviesResult } from './tmdb-api.types';
-import {TMovieSearchId} from './tmdb-api.types'
+import { TMoviesResult, TMovieDetails, TvDetails } from './tmdb-api.types';
 
 class TMDB {
   private _axios: Axios;
@@ -27,29 +26,20 @@ class TMDB {
       return Promise.reject(err);
     }
   }
-}
 
-
-class TMDBVID {
-  private _axios: Axios;
-
-  constructor(accessToken: string,movie_id:number){
-    this._axios = new Axios({baseURL: `https://api.themoviedb.org/3/${movie_id}`,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json;charset=utf-8',
-    },
-    transformResponse: (res) => JSON.parse(res)
-  });
-
-  }
-  public async searchMovieById(text: string, movie_id:number): Promise<TMovieSearchId> {
+  public async searchMovieById(movie_id:number): Promise<TMovieDetails> {
     try {
-      const result = await this._axios.get<TMovieSearchId>(`/movie/${movie_id}`, {
-        params: {
-          query: text
-        }
-      });
+      const result = await this._axios.get<TMovieDetails>(`/movie/${movie_id}`);
+      return result.data;
+    }catch(err){
+      return Promise.reject(err);
+    }
+  }
+
+
+  public async tvDetails(tv_id: number): Promise<TvDetails> {
+    try {
+      const result = await this._axios.get<TvDetails>(`/tv/${tv_id}`);
       return result.data;
     }catch(err){
       return Promise.reject(err);
@@ -57,4 +47,8 @@ class TMDBVID {
   }
 }
 
-export {TMDB, TMDBVID};
+
+
+
+
+export {TMDB};

@@ -1,23 +1,22 @@
 import { TMDB  } from "./tmdb-api";
-// import {TMDBVID} from './tmdb-api'
+require('dotenv').config({path: '../.env'});
 
-
-var port = process.env.token;
+const token = process.env.token;
+console.log('Token', token);
 async function main(): Promise<void> {
-  const tmdb = new TMDB(`${port}`);
+  if(!token){
+    console.log('API KEY not provided');
+    return;
+  }
+  const tmdb = new TMDB(token);
   const movies = await tmdb.searchMovie('Hunger Games');
+  console.log(movies);
   const movie = movies.results[0];
   if(movie){
     console.log('Original Title', movie.id);
     console.log('Overview', movie.overview);
     console.log('Language', movie.original_language);
   }
-
-//   const movieId = await  TMDBVID.searchMovieById()
-//   const movieTest = movieId.results[0]
-//  if(movieTest){
-//    console.log()
-//  }
 }
 
 main();

@@ -10,10 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tmdb_api_1 = require("./tmdb-api");
+require('dotenv').config({ path: '../.env' });
+const token = process.env.token;
+console.log('Token', token);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const tmdb = new tmdb_api_1.TMDB('eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YzcwYWVlN2NmY2UxNjViZTU4YTUxZDQ4ODdjMzIzZCIsInN1YiI6IjYxZDQ5MjQ3YTIyZDNlMDAxZGE0MDZlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vOtU9DE6EQOv6IaYBFwmrPtZch793LCAoqorjEjcrBQ');
+        if (!token) {
+            console.log('API KEY not provided');
+            return;
+        }
+        const tmdb = new tmdb_api_1.TMDB(token);
         const movies = yield tmdb.searchMovie('Hunger Games');
+        console.log(movies);
         const movie = movies.results[0];
         if (movie) {
             console.log('Original Title', movie.id);
